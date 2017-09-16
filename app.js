@@ -1,5 +1,8 @@
-const request=require('request');
 const yargs=require('yargs');
+const request=require('request');
+const geocode=require('./geocode/geocode.js');
+//ea544f30d37752b911a842b9e3c36164
+const key="ea544f30d37752b911a842b9e3c36164";
 
 const argv=yargs
 .options({
@@ -14,14 +17,14 @@ const argv=yargs
 .alias('help','h')
 .argv;
 
-console.log(argv);
-var add=encodeURIComponent(argv.a);
-request({
-	url:`https://maps.googleapis.com/maps/api/geocode/json?address='${add}`,
-	json:true
-},(error,response,body)=>{
-	//console.log(JSON.stringify(error,undefined,2));//2 is the spaces for indentation
-	console.log(`Address: ${body.results[0].formatted_address}`);
-	console.log(`Lattitude: ${body.results[0].geometry.location.lat}`);
-	console.log(`Longitude: ${body.results[0].geometry.location.lng}`);
-	});
+
+
+var g=geocode.geocodeAddress(argv.a,(errorMessage,results)=>{
+	if(errorMessage){
+		console.log(errorMessage);
+	}else{
+		console.log(JSON.stringify(results,undefined,2));
+		geocode.temperature(results.latitude,results.longitude);
+	}
+});
+
