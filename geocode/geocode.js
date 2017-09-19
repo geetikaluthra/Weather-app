@@ -26,22 +26,7 @@ var geocodeAddress=(address,callback)=>{
 	
 };
 
-var temperature=(latitude,longitude)=>{
-	request({
-	url:`https://api.darksky.net/forecast/ea544f30d37752b911a842b9e3c36164/${latitude},${longitude}`,
-	json:true
-},(error,response,body)=>{
-	if(!error && response.statusCode===200){
-		console.log(body.currently.temperature);
-	}else{
-		console.log('Unable to fetch weather');
-	}
-	
-});
-};
 
-module.exports={
-	geocodeAddress,
-	temperature
-};
+
+module.exports.geocodeAddress=geocodeAddress;
 	

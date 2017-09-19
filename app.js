@@ -1,8 +1,7 @@
 const yargs=require('yargs');
 const request=require('request');
 const geocode=require('./geocode/geocode.js');
-//ea544f30d37752b911a842b9e3c36164
-const key="ea544f30d37752b911a842b9e3c36164";
+const weather=require('./weather/weather.js');
 
 const argv=yargs
 .options({
@@ -18,13 +17,22 @@ const argv=yargs
 .argv;
 
 
-
-var g=geocode.geocodeAddress(argv.a,(errorMessage,results)=>{
+geocode.geocodeAddress(argv.a,(errorMessage,results)=>{
 	if(errorMessage){
 		console.log(errorMessage);
 	}else{
-		console.log(JSON.stringify(results,undefined,2));
-		geocode.temperature(results.latitude,results.longitude);
+		console.log(results.address);
+		weather.getTemperature(results.latitude,results.longitude,(errorMessage,results)=>{
+		if(errorMessage){
+			console.log(errorMessage);
+		}else{
+			console.log(`Temperature is ${results.temperature} but it feels like ${results.actualTemperature}`);
+		}
+});
+		
 	}
 });
+
+
+
 
